@@ -9,7 +9,7 @@ class Supremacy():
     """The supremacy class allow easy asses to the Supremacy 1914 API"""
 
     game_id = None
-    url = None
+    url = "http://xgs4.c.bytro.com"
     debug = 0
 
     default_params = {
@@ -33,11 +33,11 @@ class Supremacy():
         "Cache-Control": "no-cache"
     }
 
-    def __init__(self, game_id, url, debug=None):
+    def __init__(self, game_id, debug=None):
         """Initialize api"""
         self.game_id = game_id
-        self.url = url
         self.default_params["gameID"] = game_id
+        self._request()
         if debug and isinstance(debug, int):
             self.debug = debug
 
@@ -89,9 +89,10 @@ class Supremacy():
         if response["result"]["@c"] == "ultshared.rpc.UltSwitchServerException":
             if "newHostName" in response["result"]:
                 new_url = "http://%s" % response["result"]["newHostName"]
+                self.url = new_url
                 if self.debug >= 1:
                     print("new host: %s for %s" % (new_url, self.game_id))
-                raise ServerChangeError(new_url)
+                
             else:
                 if self.debug >= 1:
                     print("Game %s does not exist" % self.game_id)
@@ -102,11 +103,6 @@ class Supremacy():
 
 class GameDoesNotExistError(Exception):
     """Raise when game does not exist"""
-
-
-class ServerChangeError(Exception):
-    """Raise when server has changed"""
-
 
 def print_json(json_text):
     """Print data to console"""
