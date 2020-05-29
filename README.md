@@ -18,7 +18,7 @@ from supremacy1914_wrapper import Supremacy
 
 # Create an instance using game_id and host:
 
-sup = Supremacy("2502620", "http://xgs1.c.bytro.com")
+sup = Supremacy("2502620")
 
 # get players in JSON format 
 sup.players()
